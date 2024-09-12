@@ -1,4 +1,4 @@
-const apiKey = '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'; // Substitua pela sua chave da API
+const apiKey = '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'; // Substitua pela sua chave da API
 
 async function sendMessage() {
     const inputField = document.getElementById("user-input");
@@ -9,24 +9,24 @@ async function sendMessage() {
     addMessage(userMessage, 'user');
 
     try {
-        // Envia a mensagem para o GPT
-        const response = await fetch("https://api.openai.com/v1/completions", {
+        // Envia a mensagem para a API do OpenAI
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "gpt-4o-mini", // Certifique-se de que o modelo esteja correto
-                prompt: userMessage,
+                model: "gpt-4o-mini", // Modelo correto
+                messages: [{ role: "user", content: userMessage }],
                 max_tokens: 150
             })
         });
 
         const data = await response.json();
 
-        if (response.ok) {
-            const botMessage = data.choices[0].text; // Acesse a resposta corretamente
+        if (response.ok && data.choices && data.choices.length > 0) {
+            const botMessage = data.choices[0].message.content; // Acesse a resposta corretamente
             addMessage(botMessage, 'bot');
         } else {
             console.error("Erro na resposta da API:", data);
