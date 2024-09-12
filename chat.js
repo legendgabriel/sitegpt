@@ -1,4 +1,4 @@
-const apiKey = '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'; // Substitua pela sua chave da API
+const apiKey = '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'; // Substitua pela sua chave da API
 
 async function sendMessage() {
     const inputField = document.getElementById("user-input");
@@ -17,7 +17,7 @@ async function sendMessage() {
                 "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "text-davinci-003", // Certifique-se de que o modelo esteja correto
+                model: "gpt-4o-mini", // Certifique-se de que o modelo esteja correto
                 prompt: userMessage,
                 max_tokens: 150
             })
