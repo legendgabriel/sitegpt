@@ -1,4 +1,4 @@
-const apiKey = 'sk-proj-m579i1bqcyBrnF1kpsvUr2izZ0VDHMMKB_8r_xyeln_BrNV0KPBNlTic_kIkn6BaGRO2B_8gUxT3BlbkFJuTF6ERzvRoHBu-fN-N_FYfI6H-JkeKZrDWQN_qFKs-BYfdLUMdM6G4sQWuhocI-EZdSi-vArQAEY'; // Insira sua chave da API do OpenAI aqui.
+const apiKey = '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'; // Substitua pela sua chave da API
 
 async function sendMessage() {
     const inputField = document.getElementById("user-input");
@@ -8,25 +8,34 @@ async function sendMessage() {
     // Exibe a mensagem do usuário no chat
     addMessage(userMessage, 'user');
 
-    // Envia a mensagem para o GPT
-    const response = await fetch("https://api.openai.com/v1/completions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-            model: "text-davinci-003", // ou outro modelo de sua escolha
-            prompt: userMessage,
-            max_tokens: 150
-        })
-    });
+    try {
+        // Envia a mensagem para o GPT
+        const response = await fetch("https://api.openai.com/v1/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "text-davinci-003", // Certifique-se de que o modelo esteja correto
+                prompt: userMessage,
+                max_tokens: 150
+            })
+        });
 
-    const data = await response.json();
-    const botMessage = data.choices[0].text;
+        const data = await response.json();
 
-    // Exibe a resposta do GPT no chat
-    addMessage(botMessage, 'bot');
+        if (response.ok) {
+            const botMessage = data.choices[0].text; // Acesse a resposta corretamente
+            addMessage(botMessage, 'bot');
+        } else {
+            console.error("Erro na resposta da API:", data);
+            addMessage("Desculpe, não consegui responder agora. Tente novamente mais tarde.", 'bot');
+        }
+    } catch (error) {
+        console.error("Erro na requisição:", error);
+        addMessage("Houve um erro na comunicação com o servidor. Verifique sua conexão e tente novamente.", 'bot');
+    }
 }
 
 function addMessage(message, sender) {
